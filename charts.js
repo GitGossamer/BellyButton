@@ -3,7 +3,7 @@ function init() {
     var selector = d3.select("#selDataset");
   
     // Use the list of sample names to populate the select options
-    d3.json("samples.json").then((data) => {
+    d3.json("./samples.json").then((data) => {
       var sampleNames = data.names;
   
       sampleNames.forEach((sample) => {
@@ -32,7 +32,7 @@ function init() {
   
   // Demographics Panel 
   function buildMetadata(sample) {
-    d3.json("samples.json").then((data) => {
+    d3.json("./samples.json").then((data) => {
       var metadata = data.metadata;
       // Filter the data for the object with the desired sample number
       var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
@@ -56,7 +56,7 @@ function init() {
   // 1. Create the buildCharts function.
   function buildCharts(sample) {
     // 2. Use d3.json to load and retrieve the samples.json file 
-    d3.json("samples.json").then((data) => {
+    d3.json("./samples.json").then((data) => {
       // 3. Create a variable that holds the samples array. 
       console.log(data);
       var samplesArray = data.samples;
@@ -74,12 +74,11 @@ function init() {
       var sampleValues = firstSample.sample_values;
       console.log(otuIds);
       console.log(otuLabels);
-      //console.log("hello");
       console.log(sampleValues);
   
       // 7. Create the yticks for the bar chart.
       // Hint: Get the the top 10 otu_ids and map them in descending order  
-      //  so the otu_ids with the most bacteria are last. 
+      //  so the otu_ids with the most bacteria are last. Use the slice() method with map() and reverse() functions.
   
       var yticks = otuIds.slice(0,10).map(id => "OTU " + id).reverse();
       console.log(yticks);
@@ -92,7 +91,10 @@ function init() {
       }];
       // 9. Create the layout for the bar chart. 
       var barLayout = {
-        title: "Top 10 Bacteria Cultures Found",
+        title: "<b>Top 10 Bacteria Cultures Found",
+        font: { family: 'Calibri, monospace', size: 17, color: '##000000'}, 
+        plot_bgcolor: "Gainsboro",
+        paper_bgcolor: "Gainsboro",
         yaxis: {
           tickmode: "array",
           tickvals: [0,1,2,3,4,5,6,7,8,9],
@@ -105,7 +107,8 @@ function init() {
           xanchor: 'center',
           y: -0.25,
           yanchor: 'center',
-          text: 'The bar chart displays the top 10 bacterial species (OTUs)<br>with the number of samples found in your belly button',
+          text: 'Top 10 bacterial species (OTUs)<br>with the number of samples found in your belly button',
+          fontColor: "green",
           showarrow: false
         }]
       };
@@ -119,7 +122,7 @@ function init() {
       // Use d3.json to load and retrieve the samples.json file 
       //d3.json("samples.json").then((data) => {
   
-      // 1. Create the trace for the bubble chart.
+      // 1. Create the trace for the bubble chart.  
       var bubbleData = [{
         x: otuIds,
         y: sampleValues,
@@ -134,9 +137,12 @@ function init() {
       console.log(bubbleData);
       // 2. Create the layout for the bubble chart.
       var bubbleLayout = {
-        title: 'Bacteria Cultures Per Sample',
+        title: '<b>Bacteria Cultures Per Sample',
+        font: { family: 'Calibri, monospace', size: 17, color: '##000000'}, 
+        plot_bgcolor: "Gainsboro",
+        paper_bgcolor: "Gainsboro",
         showlegend: false,
-        xaxis: {title: "OTU ID", automargin: true},
+        xaxis: {title: "OTU ID", automargin: false},
         yaxis: {automargin: true},
         //margin: { t: 50, r: 50, l: 50, b: 50 },
         hovermode: "closest"
@@ -182,6 +188,8 @@ function init() {
       // 5. Create the layout for the gauge chart.
       var gaugeLayout = { 
         autosize: true,
+        plot_bgcolor: "Gainsboro",
+        paper_bgcolor: "Gainsboro",
         annotations: [{
           xref: 'paper',
           yref: 'paper',
@@ -190,11 +198,12 @@ function init() {
           y: 0,
           yanchor: 'center',
           text: "The gauge displays your belly button weekly washing frequency",
+          font: { family: 'Calibri, monospace', size: 15, color: '#7f7f7f'}, 
           showarrow: false
         }]
       };
   
       // 6. Use Plotly to plot the gauge data and layout.
-      Plotly.newPlot("gauge", gaugeData, gaugeLayout, {responsive: true});
+      Plotly.newPlot("gauge", gaugeData, gaugeLayout, {responsive: true}); 
     });
   }
